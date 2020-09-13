@@ -1,0 +1,8 @@
+body {
+    color: #0c0233;
+}
+
+table, td, th {
+    border: 1px solid #999;
+    padding: 5px;
+}

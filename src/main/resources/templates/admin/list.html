@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-start">
+        <li th:if="${units.hasPrevious()}" class="page-item" >
+            <a class="page-link" th:href="@{/unit/list(page=${units.number-1})}" tabindex="-1"><i class="fa fa-chevron-left"></i></a>
+        </li>
+        <th:block th:each="i: ${#numbers.sequence(0, units.totalPages - 1)}">
+            <li class="page-item active" th:if="${units.number == i}" >
+                <span class="page-link">[[${i}+1]]</span>
+            </li>
+            <li th:unless="${units.number == i}">
+                <a class="page-link" th:href="@{/unit/list(page=${i})}">[[${i}+1]]</a>
+            </li>
+        </th:block>
+        <li class="page-item" th:if="${units.hasNext()}">
+            <a class="page-link" th:href="@{/unit/list(page=${units.number+1})}"><i class="fa fa-chevron-right"></i></a>
+        </li>
+    </ul>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Admin Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/admin/home">Admin Page</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/admin/listUser">User List</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/admin/createUser">Create User</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>List of Users</h1>
+    </div>
+</div>
+
+<div class="container-fluid bg-3 text-center">
+    <table id="userList"  class="table display">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Birth Date</th>
+            <th scope="col">Login</th>
+            <th scope="col">About Me</th>
+            <th scope="col">Address</th>
+            <th scope="col">Active</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${userList}">
+                <th th:text="${user.name}"></th>
+                <th th:text="${user.lastName}">...</th>
+                <th th:text="${user.birthDate}">...</th>
+                <th th:text="${user.userName}">...</th>
+                <th th:text="${user.aboutMe}">...</th>
+                <th th:text="${user.address}">...</th>
+                <th th:text="${user.active}">...</th>
+                <th th:text="${user.roles[0].getRole()}">...</th>
+                <th>
+                    <a th:href="@{/admin/userList/update(userId=${user.id})}">Update</a>
+                </th>
+                <th>
+                    <a th:href="@{/admin/userList/delete(userId=${user.id})}">Delete</a>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    <footer>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li th:if="${userList.hasPrevious()}" class="page-item" >
+                    <a class="page-link" th:href="@{/admin/listUser(page=${userList.number-1})}" tabindex="-1">Previous</a>
+                </li>
+                <th:block th:each="i: ${#numbers.sequence(0, userList.totalPages - 1)}">
+                    <li class="page-item active" th:if="${userList.number == i}" >
+                        <span class="page-link">[[${i}+1]]</span>
+                    </li>
+                    <li th:unless="${userList.number == i}">
+                        <a class="page-link" th:href="@{/admin/listUser(page=${i})}">[[${i}+1]]</a>
+                    </li>
+                </th:block>
+                <li class="page-item" th:if="${userList.hasNext()}">
+                    <a class="page-link" th:href="@{/admin/listUser(page=${userList.number + 1})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </footer>
+
+</div><br>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/user/home">User Page</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/user/listNews">News Portal List</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/user/createNews">Create News</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/user/archiveList">Archive</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>List of News</h1>
+    </div>
+</div>
+
+<div class="container-fluid bg-3 text-center">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Create On Date</th>
+            <th scope="col">Heading</th>
+            <th scope="col">Description</th>
+            <th scope="col">Author</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="news : ${newsList}">
+            <th>
+                <div class="m-r-10"><img th:src="${news.image}" alt="org" class="rounded" width="45"></div>
+            </th>
+            <th th:text="${news.dateOfCreate}">...</th>
+            <th th:text="${news.heading}">...</th>
+            <th th:text="${news.description}">...</th>
+            <th th:text="${news.author.name}  + ' ' +${news.author.lastName}">...</th>
+            <th>
+                <a th:href="@{/user/newsList/update(newsId=${news.id})}">Update</a>
+            </th>
+            <th>
+                <a th:href="@{/user/newsList/delete(newsId=${news.id})}">Delete</a>
+            </th>
+
+        </tr>
+        </tbody>
+        <div th:if="${param.error}" class="font-bold text-danger">
+            You cannot delete or update the news portal as it is not your news portal
+        </div>
+    </table>
+    <footer>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li th:if="${newsList.hasPrevious()}" class="page-item" >
+                    <a class="page-link" th:href="@{/user/listNews(page=${newsList.number - 1})}" tabindex="-1">Previous</a>
+                </li>
+                <th:block th:each="i: ${#numbers.sequence(0, newsList.totalPages - 1)}">
+                    <li class="page-item active" th:if="${newsList.number == i}" >
+                        <span class="page-link">[[${i}+1]]</span>
+                    </li>
+                    <li th:unless="${newsList.number == i}">
+                        <a class="page-link" th:href="@{/user/listNews(page=${i})}">[[${i}+1]]</a>
+                    </li>
+                </th:block>
+                <li class="page-item" th:if="${newsList.hasNext()}">
+                    <a class="page-link" th:href="@{/user/listNews(page=${newsList.number + 1})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </footer>
+
+</div><br>
+
+</body>
+</html>
